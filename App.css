@@ -33,7 +33,8 @@ body {
   display: block;
   color: white;
   text-align: center;
-  padding-right: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
   text-decoration: none;
 }
 .home-icon{
