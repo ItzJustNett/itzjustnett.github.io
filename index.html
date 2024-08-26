@@ -4,61 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ItzSocial</title>
+    <title>ItzSocial 🇺🇦</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1c1c1c, #333); /* Default gradient */
-            color: #fff;
+            background: linear-gradient(135deg, #a3d1ff, #80cfff); /* Default light theme gradient */
+            color: #000;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: filter 0.5s ease; /* Smooth filter transition */
+            transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+        }
+
+        .dark-theme {
+            background: linear-gradient(135deg, #2c3e50, #34495e); /* Darker blue gradient for dark theme */
+            color: #ccc;
         }
 
         .navbar {
-            background-color: rgba(51, 51, 51, 0.7); /* More transparent navbar */
+            background-color: rgba(71, 169, 255, 0.8); /* Blue with transparency */
+            backdrop-filter: blur(10px); /* Apply blur to the navbar */
             overflow: hidden;
             padding: 10px 20px;
             position: relative;
             display: flex; /* Flexbox for alignment */
             align-items: center; /* Vertically center items */
-            justify-content: space-between; /* Space between left and right items */
-            transition: background-color 0.3s ease;
+            justify-content: space-between; /* Space between left, center, and right items */
             z-index: 1000; /* Ensure the navbar is on top */
+            transition: background-color 0.5s ease;
         }
 
-        .navbar a {
-            color: #f2f2f2;
-            text-align: center;
-            text-decoration: none;
-            font-size: 17px;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
+        .dark-theme .navbar {
+            background-color: rgba(44, 62, 80, 0.8); /* Darker navbar for dark theme */
         }
 
         .navbar .logo {
             font-size: 20px;
             font-weight: bold;
+            color: #fff; /* Make ItzSocial 🇺🇦 white */
         }
 
-        .navbar .menu-icon,
-        .navbar .close-icon {
+        .navbar .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px; /* Space between icons */
+        }
+
+        .navbar .nav-icons a,
+        .navbar .nav-icons a i {
+            color: #000; /* Dark icons for light theme */
+            font-size: 24px;
+            text-decoration: none;
+        }
+
+        .dark-theme .navbar .nav-icons a,
+        .dark-theme .navbar .nav-icons a i {
+            color: #fff; /* White icons in dark mode */
+        }
+
+        .navbar .nav-icons a:hover,
+        .navbar .nav-icons a:hover i {
+            color: #ddd;
+        }
+
+        .navbar .settings-icon {
+            color: #000; /* Dark settings icon for light theme */
             font-size: 24px;
             cursor: pointer;
-            opacity: 1;
-            transition: opacity 0.5s ease; /* Fade transition */
-            position: absolute;
-            right: 20px;
         }
 
-        .navbar .close-icon {
+        .dark-theme .navbar .settings-icon {
+            color: #fff; /* White settings icon in dark mode */
+        }
+
+        .navbar .settings-icon:hover {
+            color: #ddd;
+        }
+
+        /* Settings menu */
+        .settings-menu {
+            position: fixed;
+            top: 10%;
+            right: 0;
+            width: 300px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* 50% transparent dark background */
+            backdrop-filter: blur(15px); /* Blur effect */
+            border-radius: 10px;
             display: none; /* Initially hidden */
+            z-index: 2000;
+            height: 80%; /* Height to fit content */
+            color: #fff; /* White text for contrast */
+        }
+
+        .settings-menu.active {
+            display: block;
+        }
+
+        .theme-switch {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: auto; /* Align to the bottom */
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            width: 60px;
+            height: 34px;
+            position: relative;
+            display: inline-block;
+            background-color: #ccc;
+            border-radius: 34px;
+            transition: background-color 0.4s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: white;
+            bottom: 4px;
+            left: 4px;
+            transition: transform 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .theme-switch .icon {
+            margin: 0 10px;
+            font-size: 24px;
+            color: #000; /* Dark icons for light theme */
+        }
+
+        .dark-theme .theme-switch .icon {
+            color: white; /* White icons in dark mode */
         }
 
         /* Main content for posts */
@@ -67,76 +160,51 @@
             max-width: 800px;
             margin: 0 auto;
             flex-grow: 1;
-            transition: filter 0.5s ease; /* Smooth filter transition for content */
         }
 
         .post {
-            background-color: rgba(46, 46, 46, 0.9);
+            background-color: #ffffff;
+            color: #000;
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        .dark-theme .post {
+            background-color: rgba(46, 46, 46, 0.9);
+            color: #ccc;
         }
 
         .post h2 {
             margin-top: 0;
         }
-
-        /* Fullscreen overlay menu without blur */
-        .sidenav {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 999; /* On top but below navbar */
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
-            overflow-x: hidden;
-            transition: width 0.5s ease; /* Smooth transition */
-            padding-top: 60px;
-        }
-
-        .sidenav a {
-            padding: 8px 8px 8px 32px;
-            text-decoration: none;
-            font-size: 25px;
-            color: #f1f1f1;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .sidenav a:hover {
-            color: #818181;
-        }
-
-        /* Show sidenav when active */
-        .sidenav.active {
-            width: 100%; /* Cover the whole screen */
-        }
-
-        /* Apply blur to background content when sidenav is active */
-        body.blur .content {
-            filter: blur(10px);
-        }
-
-        /* Prevent navbar blur */
-        body.blur .navbar {
-            filter: none;
-        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
     <div class="navbar">
-        <a href="#" class="logo">ItzSocial</a>
-        <span class="menu-icon" onclick="openNav()"><i class="fas fa-bars"></i></span>
-        <span class="close-icon" onclick="closeNav()"><i class="fas fa-times"></i></span>
+        <a href="#" class="logo">ItzSocial 🇺🇦</a>
+        <div class="nav-icons">
+            <a href="#"><i class="fas fa-home"></i></a>
+            <a href="#"><i class="fas fa-user-friends"></i></a>
+            <a href="#"><i class="fas fa-comments"></i></a>
+            <a href="#"><i class="fas fa-video"></i></a>
+        </div>
+        <div class="settings-icon" onclick="toggleSettingsMenu()"><i class="fas fa-cog"></i></div>
     </div>
 
-    <div id="mySidenav" class="sidenav">
-        <a href="#">Home</a>
-        <a href="#">Friends</a>
-        <a href="#">Settings</a>
-        <a href="#">Account</a>
+    <div class="settings-menu" id="settingsMenu">
+        <h2>Settings</h2>
+        <div class="theme-switch">
+            <i class="fas fa-sun icon"></i>
+            <label class="switch">
+                <input type="checkbox" id="themeToggle">
+                <span class="slider"></span>
+            </label>
+            <i class="fas fa-moon icon"></i>
+        </div>
     </div>
 
     <div class="content">
@@ -155,58 +223,42 @@
     </div>
 
     <script>
-        function openNav() {
-            // Open the sidenav and apply blur to the body
-            document.getElementById("mySidenav").classList.add('active');
-            document.body.classList.add('blur');
+        const settingsMenu = document.getElementById('settingsMenu');
+        const themeToggle = document.getElementById('themeToggle');
 
-            // Hide the menu icon with fade
-            document.querySelector('.menu-icon').style.opacity = '0';
-            setTimeout(function() {
-                document.querySelector('.menu-icon').style.display = 'none';
-                // Show the close icon in the navbar with fade
-                document.querySelector('.close-icon').style.display = 'block';
-                setTimeout(function() {
-                    document.querySelector('.close-icon').style.opacity = '1';
-                }, 10); // Slight delay to ensure display change
-            }, 500); // Match the fade-out time
+        function toggleSettingsMenu() {
+            settingsMenu.classList.toggle('active');
         }
 
-        function closeNav() {
-            // Close the sidenav and remove blur from the body
-            document.getElementById("mySidenav").classList.remove('active');
-            document.body.classList.remove('blur');
-
-            // Hide the close icon in the navbar with fade
-            document.querySelector('.close-icon').style.opacity = '0';
-            setTimeout(function() {
-                document.querySelector('.close-icon').style.display = 'none';
-                // Show the menu icon with fade
-                document.querySelector('.menu-icon').style.display = 'block';
-                setTimeout(function() {
-                    document.querySelector('.menu-icon').style.opacity = '1';
-                }, 10); // Slight delay to ensure display change
-            }, 500); // Match the fade-out time
-        }
-
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
+        // Function to switch themes
+        function toggleTheme() {
+            if (themeToggle.checked) {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('theme', 'light');
             }
-            return color;
         }
 
-        function setRandomGradient() {
-            const color1 = getRandomColor();
-            const color2 = getRandomColor();
-            document.body.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+        // Load the theme on page load based on user's choice
+        function loadTheme() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggle.checked = true;
+            } else {
+                document.body.classList.remove('dark-theme');
+                themeToggle.checked = false;
+            }
         }
 
-        // Set the random gradient on page load
-        setRandomGradient();
+        // Event listener for theme toggle switch
+        themeToggle.addEventListener('change', toggleTheme);
+
+        // Load theme when the page loads
+        window.onload = loadTheme;
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </body>
 </html>
