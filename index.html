@@ -3,262 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ItzSocial 🇺🇦</title>
+    <title>Matrix Background Animation</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        * {
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #5899E2, #FFFFFF); /* Light blue to white gradient */
-            color: #000;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+            box-sizing: border-box;
         }
-
-        .dark-theme {
-            background: linear-gradient(135deg, #191714, #2234AE); /* Dark color to blue gradient */
-            color: #ccc;
-        }
-
-        .navbar {
-            background-color: rgba(71, 169, 255, 0.8); /* Blue with transparency */
-            backdrop-filter: blur(10px); /* Apply blur to the navbar */
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #000;
             overflow: hidden;
-            padding: 10px 20px;
+            height: 100vh;
+        }
+        
+        #matrix-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+        
+        .container {
             position: relative;
-            display: flex; /* Flexbox for alignment */
-            align-items: center; /* Vertically center items */
-            justify-content: space-between; /* Space between left, center, and right items */
-            z-index: 1000; /* Ensure the navbar is on top */
-            transition: background-color 0.5s ease;
-        }
-
-        .dark-theme .navbar {
-            background-color: rgba(44, 62, 80, 0.8); /* Darker navbar for dark theme */
-        }
-
-        .navbar .logo {
-            font-size: 20px;
-            font-weight: bold;
-            color: #fff; /* Make ItzSocial 🇺🇦 white */
-        }
-
-        .navbar .nav-icons {
-            display: flex;
-            align-items: center;
-            gap: 20px; /* Space between icons */
-        }
-
-        .navbar .nav-icons a,
-        .navbar .nav-icons a i {
-            color: #000; /* Dark icons for light theme */
-            font-size: 24px;
-            text-decoration: none;
-        }
-
-        .dark-theme .navbar .nav-icons a,
-        .dark-theme .navbar .nav-icons a i {
-            color: #fff; /* White icons in dark mode */
-        }
-
-        .navbar .nav-icons a:hover,
-        .navbar .nav-icons a:hover i {
-            color: #ddd;
-        }
-
-        .navbar .settings-icon {
-            color: #000; /* Dark settings icon for light theme */
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .dark-theme .navbar .settings-icon {
-            color: #fff; /* White settings icon in dark mode */
-        }
-
-        .navbar .settings-icon:hover {
-            color: #ddd;
-        }
-
-        /* Settings menu */
-        .settings-menu {
-            position: fixed;
-            top: 10%;
-            right: 0;
-            width: 300px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* 50% transparent dark background */
-            backdrop-filter: blur(15px); /* Blur effect */
-            border-radius: 10px;
-            display: none; /* Initially hidden */
-            z-index: 2000;
-            height: 80%; /* Height to fit content */
-            color: #fff; /* White text for contrast */
-        }
-
-        .settings-menu.active {
-            display: block;
-        }
-
-        .theme-switch {
+            z-index: 10;
+            width: 100%;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: auto; /* Align to the bottom */
         }
-
-        .theme-switch input {
-            display: none;
-        }
-
-        .slider {
-            width: 60px;
-            height: 34px;
-            position: relative;
-            display: inline-block;
-            background-color: #ccc;
-            border-radius: 34px;
-            transition: background-color 0.4s;
-        }
-
-        .slider:before {
-            content: "";
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background-color: white;
-            bottom: 4px;
-            left: 4px;
-            transition: transform 0.4s;
-        }
-
-        input:checked + .slider {
-            background-color: #2196F3;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-
-        .theme-switch .icon {
-            margin: 0 10px;
-            font-size: 24px;
-            color: #000; /* Dark icons for light theme */
-        }
-
-        .dark-theme .theme-switch .icon {
-            color: white; /* White icons in dark mode */
-        }
-
-        /* Main content for posts */
+        
         .content {
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
-            flex-grow: 1;
+            text-align: center;
+            color: #00ff41;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            text-shadow: 0 0 20px #00ff41;
+            animation: glow 2s ease-in-out infinite alternate;
         }
-
-        .post {
-            background-color: #ffffff;
-            color: #000;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-
-        .dark-theme .post {
-            background-color: rgba(46, 46, 46, 0.9);
-            color: #ccc;
-        }
-
-        .post h2 {
-            margin-top: 0;
+        
+        @keyframes glow {
+            from { 
+                text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; 
+            }
+            to { 
+                text-shadow: 0 0 30px #00ff41, 0 0 50px #00ff41, 0 0 70px #00ff41; 
+            }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-
-    <div class="navbar">
-        <a href="#" class="logo">ItzSocial 🇺🇦</a>
-        <div class="nav-icons">
-            <a href="#"><i class="fas fa-home"></i></a>
-            <a href="#"><i class="fas fa-user-friends"></i></a>
-            <a href="#"><i class="fas fa-comments"></i></a>
-            <a href="#"><i class="fas fa-video"></i></a>
-        </div>
-        <div class="settings-icon" onclick="toggleSettingsMenu()"><i class="fas fa-cog"></i></div>
-    </div>
-
-    <div class="settings-menu" id="settingsMenu">
-        <h2>Settings</h2>
-        <div class="theme-switch">
-            <i class="fas fa-sun icon"></i>
-            <label class="switch">
-                <input type="checkbox" id="themeToggle">
-                <span class="slider"></span>
-            </label>
-            <i class="fas fa-moon icon"></i>
-        </div>
-    </div>
-
-    <div class="content">
-        <div class="post">
-            <h2>Post Title 1</h2>
-            <p>This is the content of the first post. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut accumsan magna.</p>
-        </div>
-        <div class="post">
-            <h2>Post Title 2</h2>
-            <p>This is the content of the second post. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut accumsan magna.</p>
-        </div>
-        <div class="post">
-            <h2>Post Title 3</h2>
-            <p>This is the content of the third post. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut accumsan magna.</p>
-        </div>
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div class="container">
+        <div class="content">Xoperr Dev</div>
     </div>
 
     <script>
-        const settingsMenu = document.getElementById('settingsMenu');
-        const themeToggle = document.getElementById('themeToggle');
-
-        function toggleSettingsMenu() {
-            settingsMenu.classList.toggle('active');
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
-
-        // Function to switch themes
-        function toggleTheme() {
-            if (themeToggle.checked) {
-                document.body.classList.add('dark-theme');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.body.classList.remove('dark-theme');
-                localStorage.setItem('theme', 'light');
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Matrix characters - mix of letters, numbers, and symbols
+        const matrixChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+-=[]{}|;:,.<>?';
+        const charArray = matrixChars.split('');
+        
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        
+        // Array to track falling characters for each column
+        const drops = [];
+        const speeds = [];
+        const trails = []; // Store characters for each trail
+        
+        // Initialize arrays
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.floor(Math.random() * canvas.height / fontSize);
+            speeds[i] = Math.random() * 0.02 + 0.01;
+            trails[i] = []; // Initialize trail for this column
+            
+            // Fill initial trail with random characters
+            for (let j = 0; j < 20; j++) {
+                trails[i][j] = charArray[Math.floor(Math.random() * charArray.length)];
             }
         }
-
-        // Load the theme on page load based on user's choice
-        function loadTheme() {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'dark') {
-                document.body.classList.add('dark-theme');
-                themeToggle.checked = true;
-            } else {
-                document.body.classList.remove('dark-theme');
-                themeToggle.checked = false;
+        
+        function drawMatrix() {
+            // Create fade effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set font
+            ctx.font = `${fontSize}px Orbitron`;
+            
+            for (let i = 0; i < drops.length; i++) {
+                const x = i * fontSize;
+                
+                // Occasionally update characters in the trail (less frequently for more natural look)
+                if (Math.random() < 0.03) {
+                    const randomPos = Math.floor(Math.random() * trails[i].length);
+                    trails[i][randomPos] = charArray[Math.floor(Math.random() * charArray.length)];
+                }
+                
+                // Draw trail of characters for each column
+                for (let j = 0; j < 15; j++) {
+                    const char = trails[i][j] || charArray[Math.floor(Math.random() * charArray.length)];
+                    const y = (drops[i] - j) * fontSize;
+                    
+                    if (y > -fontSize && y < canvas.height + fontSize) {
+                        // Determine color based on position in trail
+                        if (j === 0) {
+                            ctx.fillStyle = '#ffffff'; // Bright white for the head
+                        } else if (j <= 2) {
+                            ctx.fillStyle = '#ccffcc'; // Light green for next few
+                        } else {
+                            // Smooth fade from green to transparent
+                            const opacity = Math.max(0.05, 0.9 - (j / 15));
+                            ctx.fillStyle = `rgba(0, 255, 65, ${opacity})`;
+                        }
+                        
+                        ctx.fillText(char, x, y);
+                    }
+                }
+                
+                // Move drop down
+                drops[i] += speeds[i];
+                
+                // When head moves to new position, shift trail characters
+                if (Math.floor(drops[i]) !== Math.floor(drops[i] - speeds[i])) {
+                    // Shift trail down and add new character at front
+                    trails[i].unshift(charArray[Math.floor(Math.random() * charArray.length)]);
+                    if (trails[i].length > 20) {
+                        trails[i].pop();
+                    }
+                }
+                
+                // Reset drop when it goes off screen
+                if (drops[i] * fontSize > canvas.height + fontSize * 15) {
+                    drops[i] = -Math.random() * 20; // Start above screen
+                    speeds[i] = Math.random() * 0.02 + 0.01;
+                }
             }
         }
-
-        // Event listener for theme toggle switch
-        themeToggle.addEventListener('change', toggleTheme);
-
-        // Load theme when the page loads
-        window.onload = loadTheme;
+        
+        // Animation loop
+        let lastTime = 0;
+        const targetFPS = 30; // Limit to 30 FPS for slower tempo
+        const frameInterval = 1000 / targetFPS;
+        
+        function animate(currentTime) {
+            if (currentTime - lastTime >= frameInterval) {
+                drawMatrix();
+                lastTime = currentTime;
+            }
+            requestAnimationFrame(animate);
+        }
+        
+        animate(0);
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            const newColumns = Math.floor(canvas.width / fontSize);
+            
+            // Adjust arrays for new column count
+            while (drops.length < newColumns) {
+                drops.push(Math.floor(Math.random() * canvas.height / fontSize));
+                speeds.push(Math.random() * 0.02 + 0.01);
+                
+                // Initialize trail for new column
+                const newTrail = [];
+                for (let j = 0; j < 20; j++) {
+                    newTrail[j] = charArray[Math.floor(Math.random() * charArray.length)];
+                }
+                trails.push(newTrail);
+            }
+            
+            if (drops.length > newColumns) {
+                drops.length = newColumns;
+                speeds.length = newColumns;
+                trails.length = newColumns;
+            }
+        });
     </script>
-
 </body>
 </html>
